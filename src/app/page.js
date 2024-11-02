@@ -27,7 +27,7 @@ export default function Home() {
             Site Under Development
           </h2>
           <p className="text-gray-600 text-lg">
-            We are working hard to bring you something amazing. Stay tuned!
+            We&apos;re working hard to bring you something amazing. Stay tuned!
           </p>
         </div>
 
