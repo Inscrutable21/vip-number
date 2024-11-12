@@ -1,8 +1,17 @@
 import LoginForm from '@/components/admin/LoginForm';
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 import { isAuthenticated } from '@/lib/auth';
 
-export default async function AdminPage() {
+export default function AdminPage() {
+  return (
+    <Suspense fallback={<LoadingState />}>
+      <AdminPageContent />
+    </Suspense>
+  );
+}
+
+async function AdminPageContent() {
   try {
     // Check if user is already authenticated
     const authenticated = await isAuthenticated();
@@ -29,4 +38,12 @@ export default async function AdminPage() {
       </div>
     );
   }
+}
+
+function LoadingState() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div>Loading...</div>
+    </div>
+  );
 }
