@@ -1,4 +1,7 @@
 // src/app/page.js
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import { Suspense } from 'react';
 import Link from 'next/link';
 import Header from '@/components/landing/Header';
@@ -6,9 +9,14 @@ import HeroSection from '@/components/landing/HeroSection';
 import VipNumberGrid from '@/components/landing/VipNumberGrid';
 import Footer from '@/components/landing/Footer';
 import { prisma } from '@/lib/prisma';
+import DeliveryProcessSection from '@/components/landing/DeliveryProcessSection';
 
 async function getVipNumbers() {
   try {
+    // Verify database connection
+    await prisma.$connect();
+    
+    // Fetch numbers with validation
     const numbers = await prisma.vipNumber.findMany({
       where: {
         status: "available"
@@ -16,30 +24,65 @@ async function getVipNumbers() {
       orderBy: {
         createdAt: 'desc'
       },
-      take: 9
+      take: 9,
+      select: {
+        // Explicitly select the fields you need
+        id: true,
+        number: true,
+        price: true,
+        status: true,
+        createdAt: true,
+        // Add any other fields you need
+      }
     });
 
-    return numbers;
+    // Validate the returned data
+    if (!Array.isArray(numbers)) {
+      throw new Error('Invalid data format returned from database');
+    }
+
+    // Map the data to ensure all required fields are present
+    const validatedNumbers = numbers.map(number => ({
+      id: number.id || '',
+      number: number.number || '',
+      price: number.price || 0,
+      status: number.status || 'available',
+      createdAt: number.createdAt || new Date(),
+      // Add any other fields with default values
+    }));
+
+    return validatedNumbers;
   } catch (error) {
-    console.error('Error fetching VIP numbers:', error);
-    throw error;
+    console.error('Database Error:', {
+      message: error.message,
+      stack: error.stack,
+      code: error.code
+    });
+    return []; // Return empty array instead of throwing
+  } finally {
+    // Always disconnect after operation
+    await prisma.$disconnect();
   }
 }
 
 export default async function Home() {
-  let numbers;
+  let numbers = [];
+  
   try {
-    numbers = await getVipNumbers();
+    const fetchedNumbers = await getVipNumbers();
+    numbers = Array.isArray(fetchedNumbers) ? fetchedNumbers : [];
   } catch (error) {
-    console.error('Error fetching VIP numbers:', error);
+    console.error('Error in Home component:', {
+      message: error.message,
+      stack: error.stack
+    });
+    // Set numbers to empty array if there's an error
     numbers = [];
   }
-
 
   // Function to create WhatsApp link with message
   const getWhatsAppLink = (number, price) => {
     if (!number || !price) {
-      // Default message when no parameters are provided
       const defaultMessage = encodeURIComponent("Hello! I'm interested in buying a VIP number. Please provide more details.");
       return `https://wa.me/919651990083?text=${defaultMessage}`;
     }
@@ -55,45 +98,7 @@ export default async function Home() {
       <main className="min-h-screen">
         {/* Hero Section */}
         <HeroSection />
-
-       
-        {/* Features Section */}
-        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center p-6">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Verified Numbers</h3>
-                <p className="text-gray-600">All numbers are verified and ready for immediate activation</p>
-              </div>
-              
-              <div className="text-center p-6">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Best Prices</h3>
-                <p className="text-gray-600">Competitive prices with easy payment options</p>
-              </div>
-              
-              <div className="text-center p-6">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">24/7 Support</h3>
-                <p className="text-gray-600">Round the clock customer support for your convenience</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
+        <DeliveryProcessSection /> 
         {/* Featured Numbers Section */}
         <section id="featured-numbers" className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
           <div className="max-w-7xl mx-auto">

@@ -22,11 +22,16 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [router.asPath]);
+
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) {
       setSearchError('Please enter a search term');
-      setTimeout(() => setSearchError(''), 3000); // Auto-hide error after 3s
+      setTimeout(() => setSearchError(''), 3000);
       return;
     }
 
@@ -55,14 +60,14 @@ export default function Header() {
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Main Header Content */}
-          <div className="flex justify-between h-20 lg:h-24">
+          <div className="flex justify-between h-16 sm:h-20 lg:h-24">
             {/* Logo */}
             <div className="flex items-center flex-shrink-0">
               <Link href="/" className="flex items-center">
                 <img 
                   src="/logo.jpg" 
                   alt="VIP Numbers Logo" 
-                  className="h-10 md:h-12 lg:h-16 w-auto object-contain transition-all duration-300"
+                  className="h-8 sm:h-10 md:h-12 lg:h-16 w-auto object-contain transition-all duration-300"
                 />
               </Link>
             </div>
@@ -70,20 +75,20 @@ export default function Header() {
             {/* Desktop Search Bar */}
             <div className="hidden md:flex items-center justify-center flex-1 mx-4 lg:mx-8">
               <form onSubmit={handleSearch} className="flex w-full max-w-2xl">
-                <div className="flex flex-1 relative">
+                <div className="flex flex-1 relative shadow-sm">
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search VIP numbers..."
-                    className="w-full px-4 py-2 lg:py-3 bg-gray-50 border border-gray-200 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-2 lg:py-3 bg-white border border-gray-200 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     aria-label="Search VIP numbers"
                   />
                   
                   <select
                     value={searchType}
                     onChange={(e) => setSearchType(e.target.value)}
-                    className="px-3 lg:px-4 py-2 lg:py-3 bg-gray-50 border-y border-r border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="px-3 lg:px-4 py-2 lg:py-3 bg-white border-y border-r border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     aria-label="Search type"
                   >
                     <option value="anywhere">Anywhere</option>
@@ -148,30 +153,38 @@ export default function Header() {
           {/* Mobile Search Bar */}
           <div className="md:hidden pb-4">
             <form onSubmit={handleSearch} className="flex flex-col gap-2">
-              <div className="flex">
+              <div className="relative flex shadow-sm">
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search VIP numbers..."
-                  className="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 px-4 py-2 bg-white border border-gray-200 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   aria-label="Search VIP numbers"
                 />
-                <select
-                  value={searchType}
-                  onChange={(e) => setSearchType(e.target.value)}
-                  className="px-3 py-2 bg-gray-50 border-y border-r border-gray-200 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  aria-label="Search type"
-                >
-                  <option value="anywhere">Anywhere</option>
-                  <option value="start">Start With</option>
-                  <option value="end">End With</option>
-                </select>
+                <div className="relative">
+                  <select
+                    value={searchType}
+                    onChange={(e) => setSearchType(e.target.value)}
+                    className="h-full px-3 py-2 bg-white border-y border-r border-gray-200 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none pr-8"
+                    aria-label="Search type"
+                  >
+                    <option value="anywhere">Anywhere</option>
+                    <option value="start">Start With</option>
+                    <option value="end">End With</option>
+                  </select>
+                  {/* Custom dropdown arrow */}
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
               </div>
               <button
                 type="submit"
                 disabled={isSearching}
-                className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:bg-blue-400"
+                className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:bg-blue-400 shadow-sm"
               >
                 {isSearching ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -188,7 +201,7 @@ export default function Header() {
 
         {/* Error Message */}
         {searchError && (
-          <div className="absolute left-0 right-0 flex justify-center">
+          <div className="absolute left-0 right-0 flex justify-center mt-2">
             <div className="mx-4 bg-red-100 text-red-700 px-4 py-2 rounded-lg shadow-md transition-all duration-300 text-sm">
               {searchError}
             </div>
@@ -196,8 +209,12 @@ export default function Header() {
         )}
 
         {/* Mobile Navigation Menu */}
-        <div className={`md:hidden transition-all duration-300 ${isMenuOpen ? 'max-h-64' : 'max-h-0 overflow-hidden'}`}>
-          <div className="border-t border-gray-200 bg-white">
+        <div 
+          className={`md:hidden transition-all duration-300 ${
+            isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+          }`}
+        >
+          <div className="border-t border-gray-200 bg-white shadow-lg">
             <div className="px-4 py-2 space-y-1">
               <Link
                 href="/"
@@ -228,8 +245,8 @@ export default function Header() {
         </div>
       </nav>
       
-      {/* Spacer for fixed header */}
-      <div className="h-32 md:h-20 lg:h-24" />
+      {/* Spacer for fixed header - responsive height */}
+      <div className="h-28 sm:h-32 md:h-20 lg:h-24" />
     </>
   );
 }

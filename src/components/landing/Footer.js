@@ -20,7 +20,6 @@ export default function Footer() {
               <a href="https://www.instagram.com/vipnumbershop.in_?igsh=eGwybHAzZjdyNDhm" className="text-gray-400 hover:text-white transition-colors">
                 <Instagram className="w-5 h-5" />
               </a>
-              
             </div>
           </div>
 
@@ -91,15 +90,14 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <Mail className="w-5 h-5 mt-1 flex-shrink-0" />
                 <a href="mailto:contact@vipnumbers.com" className="text-gray-400 hover:text-white transition-colors">
-                Vipnumbershop.india@gmail.com
+                  Vipnumbershop.india@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 mt-1 flex-shrink-0" />
                 <span className="text-gray-400">
-                  Glow shoe Laundry,<br />
-                  Office-2, Faizullah Estate,Jamil Nagar Road,Ekta Police Station,<br/>
-                  Bhandup(w)-400078
+                  Mundera Bazar Chauri-Chaura<br />
+                  Gorakhpur (273201) Uttar Pradesh
                 </span>
               </li>
             </ul>
@@ -107,15 +105,23 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-gray-800">
-  <p className="text-center text-gray-400">
-    © {new Date().getFullYear()} VIP Numbers. All rights reserved.
-  </p>
-  <p className="text-center text-gray-400">
-    Developed by LocalBuzz Agency
-  </p>
-</div>
+          <p className="text-center text-gray-400">
+            © {new Date().getFullYear()} VIP Numbers. All rights reserved.
+          </p>
+          <p className="text-center text-gray-400 flex items-center justify-center gap-2">
+            Developed by{' '}
+            <a 
+              href="https://www.instagram.com/localbuzzagency" 
+              className="hover:text-white transition-colors inline-flex items-center gap-1"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LocalBuzz Agency
+              <Instagram className="w-4 h-4" />
+            </a>
+          </p>
+        </div>
       </div>
-      
     </footer>
   );
 }
