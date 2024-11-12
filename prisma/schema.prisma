@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// Since there's only one admin, we'll keep it super simple
+model Admin {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  email    String @unique
+  password String // Will store hashed password
+}
+
+model VipNumber {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  number      String   @unique  // The actual VIP number
+  price       Float    // Price of the VIP number
+  status      String   @default("available") // "available" or "sold"
+  createdAt   DateTime @default(now())
+}
+model HeroImage {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  imageUrl  String   @unique
+  order     Int      @default(0) // Specify the display order
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
