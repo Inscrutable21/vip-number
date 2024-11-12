@@ -2,6 +2,19 @@
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 
+// Check for required environment variables
+function checkRequiredEnvVars() {
+    const required = ['ADMIN_EMAIL', 'ADMIN_PASSWORD'];
+    const missing = required.filter(key => !process.env[key]);
+    
+    if (missing.length > 0) {
+        throw new Error(
+            `Missing required environment variables: ${missing.join(', ')}\n` +
+            'Please make sure these are defined in your .env file'
+        );
+    }
+}
+
 async function hashPassword(password) {
     const salt = await bcrypt.genSalt(10);
     return bcrypt.hash(password, salt);
@@ -11,18 +24,21 @@ const prisma = new PrismaClient();
 
 async function main() {
     try {
+        // Verify environment variables are present
+        checkRequiredEnvVars();
+
         // First, delete ALL existing admin accounts
         console.log('Deleting existing admin accounts...');
         await prisma.admin.deleteMany({});
         console.log('Existing admin accounts deleted.');
 
-        // Hash the new password
-        const hashedPassword = await hashPassword('Tubelight@01');
+        // Hash the password from environment variable
+        const hashedPassword = await hashPassword(process.env.ADMIN_PASSWORD);
         
-        // Create new admin account with hardcoded values to ensure update
+        // Create new admin account using environment variables
         const admin = await prisma.admin.create({
             data: {
-                email: 'Vipnumbershop.india@gmail.com',
+                email: process.env.ADMIN_EMAIL,
                 password: hashedPassword
             }
         });
@@ -32,7 +48,7 @@ async function main() {
         // Verify the update
         const verifyAdmin = await prisma.admin.findUnique({
             where: {
-                email: 'Vipnumbershop.india@gmail.com'
+                email: process.env.ADMIN_EMAIL
             }
         });
         
