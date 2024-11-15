@@ -84,7 +84,7 @@ export default async function Home() {
   const getWhatsAppLink = (number, price) => {
     if (!number || !price) {
       const defaultMessage = encodeURIComponent("Hello! I'm interested in buying a VIP number. Please provide more details.");
-      return `https://wa.me/919651990083?text=${defaultMessage}`;
+      return `https://wa.me/919119991466?text=${defaultMessage}`;
     }
     
     const message = encodeURIComponent(`Hello! I'm interested in buying VIP number ${number} priced at ₹${price.toLocaleString()}. Please provide more details.`);

@@ -15,7 +15,7 @@ const VipNumberGrid = ({ numbers }) => {
     const message = encodeURIComponent(
       `Hello! I'm interested in buying VIP number ${number} priced ${formattedPrice}. Please provide more details.`
     );
-    const whatsappUrl = `https://wa.me/919651990083?text=${message}`;
+    const whatsappUrl = `https://wa.me/919119991466?text=${message}`;
     window.open(whatsappUrl, '_blank');
   };
 
