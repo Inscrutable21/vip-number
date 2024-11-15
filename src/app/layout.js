@@ -5,7 +5,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 
 export const metadata = {
-  title: 'VIP Numbers - Coming Soon',
+  title: 'VIP Numbers Shop',
   description: 'Premium VIP number service - Site under development',
 }
 
