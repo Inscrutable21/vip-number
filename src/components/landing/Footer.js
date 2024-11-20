@@ -1,6 +1,6 @@
 // src/components/landing/Footer.js
 import Link from 'next/link';
-import { Phone, Mail, MapPin, Facebook, Instagram, Twitter } from 'lucide-react';
+import { Phone, Mail, MapPin, Facebook, Instagram, } from 'lucide-react';
 
 export default function Footer() {
   return (

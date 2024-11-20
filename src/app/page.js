@@ -1,4 +1,5 @@
 // src/app/page.js
+import Script from 'next/script';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
@@ -26,29 +27,24 @@ async function getVipNumbers() {
       },
       take: 9,
       select: {
-        // Explicitly select the fields you need
         id: true,
         number: true,
         price: true,
         status: true,
         createdAt: true,
-        // Add any other fields you need
       }
     });
 
-    // Validate the returned data
     if (!Array.isArray(numbers)) {
       throw new Error('Invalid data format returned from database');
     }
 
-    // Map the data to ensure all required fields are present
     const validatedNumbers = numbers.map(number => ({
       id: number.id || '',
       number: number.number || '',
       price: number.price || 0,
       status: number.status || 'available',
       createdAt: number.createdAt || new Date(),
-      // Add any other fields with default values
     }));
 
     return validatedNumbers;
@@ -58,9 +54,8 @@ async function getVipNumbers() {
       stack: error.stack,
       code: error.code
     });
-    return []; // Return empty array instead of throwing
+    return [];
   } finally {
-    // Always disconnect after operation
     await prisma.$disconnect();
   }
 }
@@ -76,11 +71,9 @@ export default async function Home() {
       message: error.message,
       stack: error.stack
     });
-    // Set numbers to empty array if there's an error
     numbers = [];
   }
 
-  // Function to create WhatsApp link with message
   const getWhatsAppLink = (number, price) => {
     if (!number || !price) {
       const defaultMessage = encodeURIComponent("Hello! I'm interested in buying a VIP number. Please provide more details.");
@@ -93,13 +86,37 @@ export default async function Home() {
 
   return (
     <>
+      {/* Meta Pixel Script */}
+      <Script strategy="afterInteractive" id="facebook-pixel">
+        {`
+          !function(f,b,e,v,n,t,s)
+          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+          n.queue=[];t=b.createElement(e);t.async=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t,s)}(window, document,'script',
+          'https://connect.facebook.net/en_US/fbevents.js');
+          fbq('init', '913423483665300');
+          fbq('track', 'PageView');
+        `}
+      </Script>
+      <noscript>
+        <img 
+          height="1" 
+          width="1" 
+          style={{ display: 'none' }}
+          src="https://www.facebook.com/tr?id=913423483665300&ev=PageView&noscript=1"
+          alt="facebook pixel"
+        />
+      </noscript>
+      
       <Header />
       
       <main className="min-h-screen">
-        {/* Hero Section */}
         <HeroSection />
         <DeliveryProcessSection /> 
-        {/* Featured Numbers Section */}
+        
         <section id="featured-numbers" className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
@@ -127,7 +144,6 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Contact CTA Section */}
         <section className="py-16 px-4 sm:px-6 lg:px-8 bg-blue-600">
           <div className="max-w-7xl mx-auto text-center">
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">

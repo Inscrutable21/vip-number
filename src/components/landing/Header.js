@@ -59,7 +59,7 @@ export default function Header() {
         <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Main Header Content */}
           <div className="flex justify-between h-16 sm:h-20 lg:h-24">
-            {/* Logo and Brand Section - Adjusted for better spacing */}
+            {/* Logo and Brand Section */}
             <div className="flex items-center flex-shrink-0">
               <Link href="/" className="flex items-start gap-2 sm:gap-3">
                 <img 
@@ -67,7 +67,7 @@ export default function Header() {
                   alt="VIP Numbers Logo" 
                   className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto object-contain transition-all duration-300"
                 />
-                {/* Desktop Brand Text - Improved typography */}
+                {/* Desktop Brand Text */}
                 <div className="hidden sm:flex flex-col justify-center">
                   <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-blue-600 leading-tight font-serif">
                     VIP Number Shop
@@ -77,20 +77,19 @@ export default function Header() {
                   </p>
                 </div>
 
-                {/* Mobile Brand Text - Enhanced visibility */}
-                <div className="sm:hidden flex flex-col justify-center items-center text-center">
-  <h1 className="text-base font-bold text-blue-600 leading-tight font-serif">
-    VIP Number Shop
-  </h1>
-  <p className="text-xs text-gray-600 font-medium flex items-center justify-center">
-    <span>Premium numbers for premium people </span>
-  </p>
-</div>
-
+                {/* Mobile Brand Text */}
+                <div className="sm:hidden flex flex-col justify-center">
+                  <h1 className="text-base font-bold text-blue-600 leading-tight font-serif">
+                    VIP Number Shop
+                  </h1>
+                  <p className="text-xs text-gray-600 font-medium">
+                    Premium numbers for premium people
+                  </p>
+                </div>
               </Link>
             </div>
 
-            {/* Desktop Search Bar - Widened and improved */}
+            {/* Desktop Search Bar */}
             <div className="hidden md:flex items-center justify-center flex-1 mx-6 lg:mx-12">
               <form onSubmit={handleSearch} className="flex w-full max-w-4xl">
                 <div className="flex flex-1 relative shadow-sm rounded-lg overflow-hidden">
@@ -129,7 +128,7 @@ export default function Header() {
               </form>
             </div>
 
-            {/* Desktop Navigation - Enhanced spacing and interaction */}
+            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
               <Link 
                 href="/" 
@@ -152,7 +151,7 @@ export default function Header() {
               </a>
             </div>
 
-            {/* Mobile menu button - Enhanced interaction */}
+            {/* Mobile menu button */}
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -168,29 +167,32 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Mobile Search Bar - Improved layout and interaction */}
+          {/* Mobile Search Bar - Updated for better visibility and usability */}
           <div className="md:hidden pb-4">
             <form onSubmit={handleSearch} className="flex flex-col gap-3">
-              <div className="flex shadow-sm rounded-lg overflow-hidden">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search VIP numbers..."
-                  className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  aria-label="Search VIP numbers"
-                />
-                <select
-                  value={searchType}
-                  onChange={(e) => setSearchType(e.target.value)}
-                  className="w-32 px-3 py-3 bg-gray-50 border-y border-r border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-medium"
-                  aria-label="Search type"
-                >
-                  <option value="anywhere">Anywhere</option>
-                  <option value="start">Start With</option>
-                  <option value="end">End With</option>
-                </select>
-              </div>
+              {/* Search Input */}
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search VIP numbers..."
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                aria-label="Search VIP numbers"
+              />
+              
+              {/* Search Type Dropdown - Full width and clearly visible */}
+              <select
+                value={searchType}
+                onChange={(e) => setSearchType(e.target.value)}
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-medium text-gray-700"
+                aria-label="Search type"
+              >
+                <option value="anywhere">Anywhere</option>
+                <option value="start">Start With</option>
+                <option value="end">End With</option>
+              </select>
+
+              {/* Search Button */}
               <button
                 type="submit"
                 disabled={isSearching}
@@ -209,7 +211,7 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Error Message - Improved visibility */}
+        {/* Error Message */}
         {searchError && (
           <div className="absolute left-0 right-0 flex justify-center mt-2">
             <div className="mx-4 bg-red-100 text-red-700 px-6 py-3 rounded-lg shadow-md transition-all duration-300 text-sm font-medium">
@@ -218,7 +220,7 @@ export default function Header() {
           </div>
         )}
 
-        {/* Mobile Navigation Menu - Enhanced interaction and visibility */}
+        {/* Mobile Navigation Menu */}
         <div 
           className={`md:hidden transition-all duration-300 ${
             isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
@@ -255,7 +257,7 @@ export default function Header() {
         </div>
       </nav>
       
-      {/* Spacer for fixed header - responsive height */}
+      {/* Spacer for fixed header */}
       <div className="h-32 sm:h-36 md:h-24 lg:h-28" />
     </>
   );
